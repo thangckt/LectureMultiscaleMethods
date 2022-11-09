@@ -1,0 +1,30 @@
+format: jb-book
+root: README_thang
+parts:
+  - caption: Lectures
+    chapters:
+    - file: notebooks/ml_cfd_intro
+    - file: notebooks/cfd_intro
+    - file: notebooks/ml_intro
+    - file: notebooks/bubble_path_classification
+    - file: notebooks/mass_transfer_regression
+    - file: notebooks/cylinder_pinn
+    - file: notebooks/coherent_structures_dim_reduction
+    - file: notebooks/cylinder_rom
+    - file: notebooks/cylinder_bayesian_opt
+    - file: notebooks/cylinder_drl
+
+  - caption: Exercises
+    chapters:
+    - file: notebooks/python_intro
+    - file: notebooks/system_setup
+    - file: notebooks/cfd_intro_exercise
+    - file: notebooks/ml_intro_exercise
+    - file: notebooks/bubble_path_classification_exercise
+    - file: notebooks/mass_transfer_regression_exercise
+    - file: notebooks/cylinder_pinn_exercise
+    - file: notebooks/coherent_structures_dim_reduction_exercise
+    - file: notebooks/cylinder_rom_exercise
+    - file: notebooks/cylinder_bayesian_opt_exercise
+    - file: notebooks/cylinder_drl_exercise
+    
