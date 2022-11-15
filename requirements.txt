@@ -1,5 +1,7 @@
+jupyter-book
+gh-import
 numpy
 matplotlib
 scipy
-tensorflow
+tensorflow==2
 h5py
