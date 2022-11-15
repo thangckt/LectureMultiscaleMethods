@@ -22,7 +22,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install jupyter-book ghp-import
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          # pip install jupyter-book ghp-import
+
+
       - name: build jupyter-book and copy book's HTML to the gh-pages branch
         run: |
           jupyter-book build ./    

@@ -9,7 +9,7 @@
 ###  Python, python-jupyter stuff
 ### ----------------------------------------------------------------------------
 # Dependencies
-/node_modules
+/.ipynb_checkpoints
 /__pycache__
 /venv
 /.venv
