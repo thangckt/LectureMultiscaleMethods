@@ -1,5 +1,5 @@
 numpy
 matplotlib
 scipy
-tensorflow==2.1.0
-h5py==2.10.0
+tensorflow
+h5py
