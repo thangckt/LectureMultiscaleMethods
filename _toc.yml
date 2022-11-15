@@ -3,28 +3,26 @@ root: README_thang
 parts:
   - caption: Lectures
     chapters:
-    - file: notebooks/ml_cfd_intro
-    - file: notebooks/cfd_intro
-    - file: notebooks/ml_intro
-    - file: notebooks/bubble_path_classification
-    - file: notebooks/mass_transfer_regression
-    - file: notebooks/cylinder_pinn
-    - file: notebooks/coherent_structures_dim_reduction
-    - file: notebooks/cylinder_rom
-    - file: notebooks/cylinder_bayesian_opt
-    - file: notebooks/cylinder_drl
+    - file: 01_michaelismenten
+    - file: 02_kinematics.ipynb
+    - file: 02_kinematics_tasks.ipynb
+    - file: 03_kinetics.ipynb
+    - file: 03_kinetics_tasks.ipynb
+    - file: 04_Analytical_methods.ipynb
+    - file: ANN_example.ipynb
 
-  - caption: Exercises
-    chapters:
-    - file: notebooks/python_intro
-    - file: notebooks/system_setup
-    - file: notebooks/cfd_intro_exercise
-    - file: notebooks/ml_intro_exercise
-    - file: notebooks/bubble_path_classification_exercise
-    - file: notebooks/mass_transfer_regression_exercise
-    - file: notebooks/cylinder_pinn_exercise
-    - file: notebooks/coherent_structures_dim_reduction_exercise
-    - file: notebooks/cylinder_rom_exercise
-    - file: notebooks/cylinder_bayesian_opt_exercise
-    - file: notebooks/cylinder_drl_exercise
+
+#   - caption: Exercises
+#     chapters:
+#     - file: notebooks/python_intro
+#     - file: notebooks/system_setup
+#     - file: notebooks/cfd_intro_exercise
+#     - file: notebooks/ml_intro_exercise
+#     - file: notebooks/bubble_path_classification_exercise
+#     - file: notebooks/mass_transfer_regression_exercise
+#     - file: notebooks/cylinder_pinn_exercise
+#     - file: notebooks/coherent_structures_dim_reduction_exercise
+#     - file: notebooks/cylinder_rom_exercise
+#     - file: notebooks/cylinder_bayesian_opt_exercise
+#     - file: notebooks/cylinder_drl_exercise
     
