@@ -6,10 +6,10 @@ on:
     branches:
       - main
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# This job installs dependencies, build the book, and pushes it to `gh-pages`
 jobs:
   build:
-    name: MkDocs Github Pages automatic deployment
+    name: Jupyter-book Github Pages automatic deployment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main          # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -18,12 +18,14 @@ jobs:
       - name: Set up Python 3
         uses: actions/setup-python@v4
         with:
-          python-version: '3'
+          python-version: '3.10'
 
-      - name: build jupyter-book and copy to gh-pages branch
+      - name: Install dependencies
         run: |
           pip install jupyter-book ghp-import
+      - name: build jupyter-book and copy book's HTML to the gh-pages branch
+        run: |
           jupyter-book build ./    
-          ghp-import -n -p -f _build/html             
+          ghp-import -n -p -f _build/html              
 
 
