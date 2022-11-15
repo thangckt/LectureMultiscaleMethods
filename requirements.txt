@@ -1,5 +1,5 @@
 jupyter-book
-gh-import
+ghp-import
 numpy
 matplotlib
 scipy
