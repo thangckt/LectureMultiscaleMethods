@@ -3,5 +3,5 @@ ghp-import
 numpy
 matplotlib
 scipy
-tensorflow==2
+tensorflow
 h5py
