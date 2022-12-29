@@ -1,5 +1,5 @@
 format: jb-book
-root: README_thang
+root: README
 parts:
   - caption: Lectures
     chapters:
@@ -25,4 +25,4 @@ parts:
 #     - file: notebooks/cylinder_rom_exercise
 #     - file: notebooks/cylinder_bayesian_opt_exercise
 #     - file: notebooks/cylinder_drl_exercise
-    
+
