@@ -1,0 +1,878 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Data-driven modeling - Tutorial 2 - Nonlinear material model &#8212; Lecture Note Multiscale Methods in Computational Mechanics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Lecture Note Multiscale Methods in Computational Mechanics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../README.html">
+                    Lecture Multiscale Methods in Computational Mechanics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../01_michaelismenten.html">
+   Macro Solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../02_kinematics.html">
+   Kinematics
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../02_kinematics_tasks.html">
+   Kinematics Tasks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../03_kinetics.html">
+   Kinetics - stress tensors and constitutive equations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../03_kinetics_tasks.html">
+   Kinetics Tasks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../04_Analytical_methods.html">
+   Analytical methods - bounds and approximations
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/lecture/data_driven_material_modeling/tutorial2.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#contents-of-this-tutorial">
+   Contents of this tutorial
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nonlinear-material-model">
+   1. Nonlinear material model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise">
+   Exercise
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#solution">
+   2. Solution
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data">
+     2.1 Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#examine-data">
+     2.2 Examine data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model">
+     2.3 Model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train">
+     2.4 Train
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluate">
+     2.5 Evaluate
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Data-driven modeling - Tutorial 2 - Nonlinear material model</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#contents-of-this-tutorial">
+   Contents of this tutorial
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nonlinear-material-model">
+   1. Nonlinear material model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise">
+   Exercise
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#solution">
+   2. Solution
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data">
+     2.1 Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#examine-data">
+     2.2 Examine data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model">
+     2.3 Model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train">
+     2.4 Train
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluate">
+     2.5 Evaluate
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="data-driven-modeling-tutorial-2-nonlinear-material-model">
+<h1>Data-driven modeling - Tutorial 2 - Nonlinear material model<a class="headerlink" href="#data-driven-modeling-tutorial-2-nonlinear-material-model" title="Permalink to this headline">#</a></h1>
+<p>Lecturer: Dr.-Ing. Mauricio Fernández</p>
+<section id="contents-of-this-tutorial">
+<h2>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="#1.-Nonlinear-material-model">1. Nonlinear material model</a></p></li>
+<li><p><a class="reference external" href="#2.-Solution">2. Solution</a></p>
+<ul>
+<li><p><a class="reference external" href="#2.1-Data">2.1 Data</a></p></li>
+<li><p><a class="reference external" href="#2.2-Examine-data">2.2 Examine data</a></p></li>
+<li><p><a class="reference external" href="#2.3-Model">2.3 Model</a></p></li>
+<li><p><a class="reference external" href="#2.4-Train">2.4 Train</a></p></li>
+<li><p><a class="reference external" href="#2.5-Evaluate">2.5 Evaluate</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="nonlinear-material-model">
+<h2>1. Nonlinear material model<a class="headerlink" href="#nonlinear-material-model" title="Permalink to this headline">#</a></h2>
+<p>For given strain-stress data, calibrate an ANN as a surrogate model.</p>
+</section>
+<section id="exercise">
+<h2>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline">#</a></h2>
+<p>Train an ANN with given strain-stress data:</p>
+<ul class="simple">
+<li><p>Load the data file ‘data.h5’ from <a class="reference external" href="https://www.frontiersin.org/articles/10.3389/fmats.2019.00075/full">Fritzen, Fernández and Larsson (2019)</a> (available at subfolder of this tutorial <code class="docutils literal notranslate"><span class="pre">files/data</span></code>). Use the subset ‘training’ of the data.</p></li>
+<li><p>Plot the first four deformation paths</p></li>
+<li><p>Build a tf.keras model. Use the SOFTPLUTS activation function</p></li>
+<li><p>Train the model for 100 epochs</p></li>
+<li><p>Plot the data and trained model for the first four deformations paths</p></li>
+</ul>
+</section>
+<section id="solution">
+<h2>2. Solution<a class="headerlink" href="#solution" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import h5py as h5
+import tensorflow as tf
+import matplotlib.pyplot as plt
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">h5py</span> <span class="k">as</span> <span class="nn">h5</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numpy&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="data">
+<h3>2.1 Data<a class="headerlink" href="#data" title="Permalink to this headline">#</a></h3>
+<p>Open hdf5 file and print group keys</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data = h5.File(&#39;files/data/data.h5&#39;, &#39;r&#39;)
+
+print(&#39;\nKeys in data at fisrt level:&#39;)
+print(data.keys())
+
+print(&#39;\nKeys in data &gt; training:&#39;)
+print(data[&#39;training&#39;].keys())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Keys in data at fisrt level:
+&lt;KeysViewHDF5 [&#39;Monte Carlo&#39;, &#39;training&#39;, &#39;validation&#39;]&gt;
+
+Keys in data &gt; training:
+&lt;KeysViewHDF5 [&#39;strain&#39;, &#39;stress_FE&#39;, &#39;stress_ROM16&#39;, &#39;stress_ROM24&#39;, &#39;stress_ROM32&#39;, &#39;stress_ROM48&#39;, &#39;stress_ROM64&#39;, &#39;stress_ROM80&#39;, &#39;stress_ROM96&#39;, &#39;tangent_ROM96&#39;]&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Get data:</p>
+<ul class="simple">
+<li><p>remember convention <span class="math notranslate nohighlight">\((\varepsilon_{11},\varepsilon_{22},\varepsilon_{33},\sqrt{2} \varepsilon_{12},\sqrt{2} \varepsilon_{13},\sqrt{2} \varepsilon_{23})\)</span></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xs = data[&#39;training&#39;][&#39;strain&#39;]
+fs = data[&#39;training&#39;][&#39;stress_FE&#39;]
+
+print(&#39;\nShapes of input and output:&#39;)
+print(xs.shape)
+print(fs.shape)
+
+print(xs[0:4])
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapes of input and output:
+(10368, 6)
+(10368, 6)
+[[-7.43789818e-05 -3.88406733e-05  1.19396136e-04 -1.16749375e-04
+   3.39936380e-05  4.62182385e-04]
+ [-2.97515927e-04 -1.55362693e-04  4.77584543e-04 -4.66997502e-04
+   1.35974552e-04  1.84872954e-03]
+ [-5.20652872e-04 -2.71884713e-04  8.35772950e-04 -8.17245628e-04
+   2.37955466e-04  3.23527669e-03]
+ [-7.43789818e-04 -3.88406733e-04  1.19396136e-03 -1.16749375e-03
+   3.39936380e-04  4.62182385e-03]]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="examine-data">
+<h3>2.2 Examine data<a class="headerlink" href="#examine-data" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xs2 = np.linalg.norm(xs, axis=1)[:30]
+print(xs2)
+plt.figure()
+plt.plot(xs2)
+plt.ylabel(&#39;$||\\varepsilon||$&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.00049969 0.00199878 0.00349786 0.00499695 0.00749542 0.00999389
+ 0.01499084 0.02498474 0.03997558 0.00048147 0.00192588 0.0033703
+ 0.00481471 0.00722207 0.00962942 0.01444414 0.02407356 0.0385177
+ 0.00049569 0.00198277 0.00346984 0.00495692 0.00743538 0.00991384
+ 0.01487076 0.0247846  0.03965536 0.00040445 0.00161778 0.00283112]
+</pre></div>
+</div>
+<img alt="../../_images/tutorial2_12_1.png" src="../../_images/tutorial2_12_1.png" />
+</div>
+</div>
+<p>Standardize colors for dirst 4 deformation paths</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>colors = [&#39;blue&#39;, &#39;orange&#39;, &#39;green&#39;, &#39;red&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plot first 4 deformation paths (each deformation path has 9 data points)</p>
+<p>Plot strain norm vs. stress norm</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure()
+for i in range(4):
+    xs2 = np.linalg.norm(xs[9*i:9*(i+1)], axis=1)    
+    fs2 = np.linalg.norm(fs[9*i:9*(i+1)], axis=1)
+    plt.plot(xs2, fs2, color=colors[i], label=&#39;path %i - data&#39; % (i+1))
+    plt.scatter(xs2, fs2, color=colors[i])
+plt.xlabel(&#39;$||\\varepsilon||$&#39;)
+plt.ylabel(&#39;$||\\sigma||$&#39;)
+plt.legend()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/tutorial2_16_0.png" src="../../_images/tutorial2_16_0.png" />
+</div>
+</div>
+<p>Function to compute von Mises stress <span class="math notranslate nohighlight">\(\sigma_{vM}\)</span> for a list of stresses</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def stress_vM(stresses):
+    stresses_iso = np.sum(stresses[:,:3], axis=1).reshape([-1,1])*1/3*np.array([1,1,1,0,0,0])
+    stresses_dev = stresses - stresses_iso
+    return np.linalg.norm(stresses_dev, axis=1)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plot strain norm vs. von Mises stress</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure()
+for i in range(4):
+    xs2 = np.linalg.norm(xs[9*i:9*(i+1)], axis=1)
+    fs2 = stress_vM(fs[9*i:9*(i+1)])
+    plt.plot(xs2, fs2, color=colors[i], label=&#39;path %i - data&#39; % (i+1))
+    plt.scatter(xs2, fs2, color=colors[i])
+plt.xlabel(&#39;$||\\varepsilon||$&#39;)
+plt.ylabel(&#39;$\\sigma_{vM}$&#39;)
+plt.ylim(0,max(fs2)*1.2)
+plt.legend()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/tutorial2_20_0.png" src="../../_images/tutorial2_20_0.png" />
+</div>
+</div>
+<p>Save first 4 paths for later evaluation</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xs_ev = xs[:9*4]
+fs_ev = fs[:9*4]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Transform input for better usage of activation functions</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(np.mean(xs, axis=0))
+print(np.std(xs, axis=0))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-1.39682211e-04  6.21148417e-05  8.12561373e-05 -3.48467020e-04
+  6.05625692e-05  1.56899687e-04]
+[0.00577254 0.00577391 0.00577367 0.00699377 0.00700179 0.00700054]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mu = np.mean(xs, axis=0)
+sig = np.std(xs, axis=0)
+
+print(mu.shape)
+print(sig.shape)
+
+xs = (xs-mu)/sig
+
+print(xs.shape)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(6,)
+(6,)
+(10368, 6)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(np.mean(xs, axis=0))
+print(np.std(xs, axis=0))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-3.88492393e-17 -5.55539839e-17  1.85037171e-17 -7.62742921e-17
+  2.24218363e-16 -6.60993893e-16]
+[1. 1. 1. 1. 1. 1.]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Transform to tf objects (tensors)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xs = tf.constant(xs, dtype=tf.float32)
+fs = tf.constant(fs, dtype=tf.float32)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="model">
+<h3>2.3 Model<a class="headerlink" href="#model" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = tf.keras.Sequential([
+    tf.keras.layers.Dense(8, &#39;softplus&#39;, input_shape=[6])
+    ,tf.keras.layers.Dense(8, &#39;softplus&#39;)
+    ,tf.keras.layers.Dense(6)
+    ])
+
+model.summary()
+
+model.compile(&#39;adam&#39;, &#39;mse&#39;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model: &quot;sequential&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense (Dense)                (None, 8)                 56        
+_________________________________________________________________
+dense_1 (Dense)              (None, 8)                 72        
+_________________________________________________________________
+dense_2 (Dense)              (None, 6)                 54        
+=================================================================
+Total params: 182
+Trainable params: 182
+Non-trainable params: 0
+_________________________________________________________________
+</pre></div>
+</div>
+</div>
+</div>
+<p>Check MSE (loss)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.evaluate(xs, fs)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10368/10368 [==============================] - 1s 64us/sample - loss: 14116.7242
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>14116.72417233314
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="train">
+<h3>2.4 Train<a class="headerlink" href="#train" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.fit(xs, fs, epochs=100, verbose=0)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;tensorflow.python.keras.callbacks.History at 0x1675146acc8&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluate">
+<h3>2.5 Evaluate<a class="headerlink" href="#evaluate" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.evaluate(xs, fs)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10368/10368 [==============================] - 0s 32us/sample - loss: 538.6386
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>538.6386281708141
+</pre></div>
+</div>
+</div>
+</div>
+<p>Evaluate first 4 paths with originial data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xs_ev2 = xs_ev
+xs_ev2 = (xs_ev2 - mu)/sig
+
+fs_ev_model = model.predict(xs_ev2)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure()
+for i in range(4):
+    xs2 = np.linalg.norm(xs_ev[9*i:9*(i+1)], axis=1)    
+    fs2 = np.linalg.norm(fs_ev[9*i:9*(i+1)], axis=1)
+    fs22 = np.linalg.norm(fs_ev_model[9*i:9*(i+1)], axis=1)
+    plt.plot(xs2, fs2, label=&#39;path %i - data&#39; % (i+1), color=colors[i])
+    plt.scatter(xs2, fs2, color=colors[i])
+    plt.plot(xs2, fs22, label=&#39;path %i - model&#39; % (i+1), color=colors[i], linestyle=&#39;--&#39;)
+plt.xlabel(&#39;$||\\varepsilon||$&#39;)
+plt.ylabel(&#39;$||\\sigma||$&#39;)
+plt.legend()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/tutorial2_39_0.png" src="../../_images/tutorial2_39_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure()
+for i in range(4):
+    xs2 = np.linalg.norm(xs_ev[9*i:9*(i+1)], axis=1)
+    fs2 = stress_vM(fs_ev[9*i:9*(i+1)])
+    fs22 = stress_vM(fs_ev_model[9*i:9*(i+1)])
+    plt.plot(xs2, fs2, label=&#39;path %i - data&#39; % (i+1), color=colors[i])
+    plt.scatter(xs2, fs2, color=colors[i])
+    plt.plot(xs2, fs22, label=&#39;path %i - model&#39; % (i+1), color=colors[i], linestyle=&#39;--&#39;)
+plt.xlabel(&#39;$||\\varepsilon||$&#39;)
+plt.ylabel(&#39;$\\sigma_{vM}$&#39;)
+plt.ylim(0,max(fs2)*1.2)
+plt.legend()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/tutorial2_40_0.png" src="../../_images/tutorial2_40_0.png" />
+</div>
+</div>
+<p>The calibrated model may seem ok with respect to the MSE for the stresses, but not when compared to the von Mises stress, which is crucial for many materials. Physical insight helps to improve the architecture of ANN. More advanced approaches are presented in <a class="reference external" href="https://www.frontiersin.org/articles/10.3389/fmats.2019.00075/full">Fritzen, Fernández and Larsson (2019)</a></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./lecture/data_driven_material_modeling"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Prof. Oliver Weeger, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

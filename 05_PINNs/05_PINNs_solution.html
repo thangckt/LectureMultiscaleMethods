@@ -1,0 +1,668 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Data-driven modeling - Tutorial 3 - Physics-informed neural networks &#8212; Lecture Note Multiscale Methods in Computational Mechanics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Lecture Note Multiscale Methods in Computational Mechanics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Lecture Multiscale Methods in Computational Mechanics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../01_michaelismenten.html">
+   Macro Solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../02_kinematics.html">
+   Kinematics
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../02_kinematics_tasks.html">
+   Kinematics Tasks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../03_kinetics.html">
+   Kinetics - stress tensors and constitutive equations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../03_kinetics_tasks.html">
+   Kinetics Tasks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../04_Analytical_methods.html">
+   Analytical methods - bounds and approximations
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/05_PINNs/05_PINNs_solution.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise">
+   Exercise
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#simple-neural-network">
+   1. “Simple” neural network
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#import-data">
+     Import data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-model">
+     Define model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#calibrate-and-evaluate-model">
+     Calibrate and evaluate model
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#physics-informed-neural-network">
+   2. Physics-informed neural network
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Define model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     Calibrate and evaluate model
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Data-driven modeling - Tutorial 3 - Physics-informed neural networks</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise">
+   Exercise
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#simple-neural-network">
+   1. “Simple” neural network
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#import-data">
+     Import data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-model">
+     Define model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#calibrate-and-evaluate-model">
+     Calibrate and evaluate model
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#physics-informed-neural-network">
+   2. Physics-informed neural network
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Define model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     Calibrate and evaluate model
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="data-driven-modeling-tutorial-3-physics-informed-neural-networks">
+<h1>Data-driven modeling - Tutorial 3 - Physics-informed neural networks<a class="headerlink" href="#data-driven-modeling-tutorial-3-physics-informed-neural-networks" title="Permalink to this headline">#</a></h1>
+<p>Lecturer: Dominik Klein</p>
+<section id="exercise">
+<h2>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline">#</a></h2>
+<p>Create a Tensorflow model for the uniaxial deformation mode of the BCC cell. Use three layers with 16 nodes in each layer, with softplus activation functions. Use two network architectures:</p>
+<ol class="simple">
+<li><p>“Simple” neural network without additional physical information. Input: {F11, F22, F33}, output: {P11, P22, P33}</p></li>
+<li><p>Physics-informed neural network: model the hyperelastic potential, use <span class="math notranslate nohighlight">\(\boldsymbol{P}=\partial_{\boldsymbol{F}}W\)</span> to calculate the stress</p></li>
+</ol>
+</section>
+<section id="simple-neural-network">
+<h2>1. “Simple” neural network<a class="headerlink" href="#simple-neural-network" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Import modules
+import numpy  as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Import modules</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span>  <span class="k">as</span> <span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numpy&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="import-data">
+<h3>Import data<a class="headerlink" href="#import-data" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Load data for uniaxial deformation case of cubic &#39;BCC&#39; cell
+data = np.loadtxt(f&#39;BCC_uniaxial.txt&#39;)
+
+print(data.shape)
+
+Fs = np.array((data[:,0], data[:,4], data[:,8])).transpose()
+Ps = np.array((data[:,9], data[:,13],data[:,17])).transpose()
+
+Fs = tf.constant(Fs, dtype = tf.float32)
+Ps = tf.constant(Ps, dtype = tf.float32)
+
+# Plot data
+plt.plot(Fs[:,0], Fs[:,0], linestyle=&#39;--&#39;, label=&#39;$F_{11}$&#39;)
+plt.plot(Fs[:,0], Fs[:,1], linestyle=&#39;--&#39;, label=&#39;$F_{22}$&#39;)
+plt.xlabel(&#39;$F_{11}$&#39;)
+plt.ylabel(&#39;$F_{ij}$&#39;)
+plt.legend()
+plt.show()
+
+plt.plot(Fs[:,0], Ps[:,0], linestyle=&#39;--&#39;, label=&#39;$P_{11}$&#39;)
+plt.plot(Fs[:,0], Ps[:,1], linestyle=&#39;--&#39;, label=&#39;$P_{22}$&#39;)
+plt.xlabel(&#39;$F_{11}$&#39;)
+plt.ylabel(&#39;$P_{ij}$&#39;)
+plt.legend()
+plt.show()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-model">
+<h3>Define model<a class="headerlink" href="#define-model" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create and compile TensorFlow model
+
+model1 = tf.keras.Sequential([
+    tf.keras.layers.Dense(16, &#39;softplus&#39;, input_shape=[3]),
+    tf.keras.layers.Dense(16, &#39;softplus&#39;),
+    tf.keras.layers.Dense(16, &#39;softplus&#39;),
+    tf.keras.layers.Dense(3)
+    ])
+
+         
+model1.summary()
+
+model1.compile(&#39;adam&#39;, &#39;mse&#39;)
+
+# Evaluation for randomly initialized weights and biases
+model1.evaluate(Fs, Ps)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calibrate-and-evaluate-model">
+<h3>Calibrate and evaluate model<a class="headerlink" href="#calibrate-and-evaluate-model" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Calibrate model
+h= model1.fit(Fs, Ps, epochs=100, verbose=2)
+
+# Evaluate and plot calibrated model
+Ps_model = model1.predict(Fs)
+
+plt.plot(Fs[:,0], Ps[:,0], linestyle=&#39;--&#39;, label=&#39;$P_{11}$ data&#39;)
+plt.plot(Fs[:,0], Ps[:,1], linestyle=&#39;--&#39;, label=&#39;$P_{22}$ data&#39;)
+plt.plot(Fs[:,0], Ps_model[:,0], label=&#39;$P_{11}$ model&#39;)
+plt.plot(Fs[:,0], Ps_model[:,1], label=&#39;$P_{22}$ model&#39;)
+plt.xlabel(&#39;$F_{11}$&#39;)
+plt.ylabel(&#39;$P_{ij}$&#39;)
+plt.legend()
+plt.show()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="physics-informed-neural-network">
+<h2>2. Physics-informed neural network<a class="headerlink" href="#physics-informed-neural-network" title="Permalink to this headline">#</a></h2>
+<section id="id1">
+<h3>Define model<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create potential based constitutive model
+
+def WP(**kwargs):
+    Fs = tf.keras.Input(shape=[3])
+    Ps = _F_to_P(**kwargs)(Fs)
+    model = tf.keras.Model(Fs, Ps)
+    model.compile(&#39;adam&#39;, &#39;mse&#39;)
+    return model
+
+
+# Internal layer, evaluation of PK1 stress with TF GradientTape
+class _F_to_P(tf.keras.layers.Layer):
+    
+    def __init__(self, **kwargs):
+        super(_F_to_P, self).__init__()
+        self.W = _F_to_W(**kwargs)
+        
+    def call(self, Fs):
+        with tf.GradientTape() as tape:
+            tape.watch(Fs)
+            Ws = self.W(Fs)
+        Ps = tape.gradient(Ws, Fs)
+        return Ps
+    
+    
+# Trainable layers for potential    
+class _F_to_W(tf.keras.layers.Layer):
+    
+    def __init__(self, ns = [16, 16, 16]):
+        super(_F_to_W, self).__init__()
+        self.l0 = tf.keras.layers.Dense(ns[0], &#39;softplus&#39;, use_bias=True)
+        self.ls = [tf.keras.layers.Dense(n, &#39;softplus&#39;, \
+                        use_bias=True, \
+                        kernel_constraint=tf.keras.constraints.non_neg()) \
+                   for n in ns[1:]]
+        self.ls.append(tf.keras.layers.Dense(1, \
+                        use_bias=True, \
+                        kernel_constraint=tf.keras.constraints.non_neg()))
+
+        
+    def W_core(self, Fs):
+        
+        x = self.l0(Fs)
+            
+        for l in self.ls:
+            x = l(x)
+                
+        return x
+        
+    def call(self, Fs):
+        return self.W_core(Fs)
+    
+    
+model2=WP()
+
+model2.summary()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h3>Calibrate and evaluate model<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Calibrate model
+h= model2.fit(Fs, Ps, epochs=100, verbose=2)
+
+# Evaluate and plot calibrated model
+Ps_model_2 = model2.predict(Fs)
+
+plt.plot(Fs[:,0], Ps[:,0], linestyle=&#39;--&#39;, label=&#39;$P_{11}$ data&#39;)
+plt.plot(Fs[:,0], Ps[:,1], linestyle=&#39;--&#39;, label=&#39;$P_{22}$ data&#39;)
+plt.plot(Fs[:,0], Ps_model_2[:,0], label=&#39;$P_{11}$ model&#39;)
+plt.plot(Fs[:,0], Ps_model_2[:,1], label=&#39;$P_{22}$ model&#39;)
+plt.xlabel(&#39;$F_{11}$&#39;)
+plt.ylabel(&#39;$P_{ij}$&#39;)
+plt.legend()
+plt.show()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./05_PINNs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Prof. Oliver Weeger, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

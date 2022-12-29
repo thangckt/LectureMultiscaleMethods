@@ -1,0 +1,798 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Kinematics &#8212; Lecture Note Multiscale Methods in Computational Mechanics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Kinematics Tasks" href="02_kinematics_tasks.html" />
+    <link rel="prev" title="Macro Solution" href="01_michaelismenten.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Lecture Note Multiscale Methods in Computational Mechanics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Lecture Multiscale Methods in Computational Mechanics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="01_michaelismenten.html">
+   Macro Solution
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Kinematics
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02_kinematics_tasks.html">
+   Kinematics Tasks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03_kinetics.html">
+   Kinetics - stress tensors and constitutive equations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03_kinetics_tasks.html">
+   Kinetics Tasks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04_Analytical_methods.html">
+   Analytical methods - bounds and approximations
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/02_kinematics.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Kinematics
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#description">
+     Description
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deformation-gradient">
+   Deformation Gradient
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#polar-decomposition">
+     Polar Decomposition
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#volume-change">
+     Volume Change
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#strain-measures">
+   Strain Measures
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eigenvalues-and-invariants">
+   Eigenvalues and  Invariants
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#further-information">
+   Further Information
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Kinematics</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Kinematics
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#description">
+     Description
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deformation-gradient">
+   Deformation Gradient
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#polar-decomposition">
+     Polar Decomposition
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#volume-change">
+     Volume Change
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#strain-measures">
+   Strain Measures
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eigenvalues-and-invariants">
+   Eigenvalues and  Invariants
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#further-information">
+   Further Information
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="kinematics">
+<h1>Kinematics<a class="headerlink" href="#kinematics" title="Permalink to this headline">#</a></h1>
+<p>Created by: Dominik Klein</p>
+<p>Contact: <a class="reference external" href="mailto:dominik&#46;klein&#37;&#52;&#48;stud&#46;tu-darmstadt&#46;de">dominik<span>&#46;</span>klein<span>&#64;</span>stud<span>&#46;</span>tu-darmstadt<span>&#46;</span>de</a></p>
+<p>Date of creation: 2020-04-04</p>
+<p>Last update: 2020-07-01</p>
+<p><strong>Information:</strong>
+Run the following cell to define all commands for this notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%run -i ./code/02_kinematics/main.py
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">lec_multiscale</span><span class="o">/</span><span class="n">lec_multiscale</span><span class="o">/</span><span class="n">code</span><span class="o">/</span><span class="mi">02</span><span class="n">_kinematics</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Import required modules</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>                        <span class="c1"># numerics</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numpy&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">#</a></h2>
+<p>In this notebook, an introduction into deformation kinematic is presented. Beside some simple strain measures, the polar and volumetric-deviatoric decomposition of the deformation gradient as well as it’s principal values and invariants are shown.</p>
+<p>This notebook provides interactive content, which can be activated in the cell below. By default, the notebook content is set to static.</p>
+<p><strong>Static:</strong>
+Run the following cell for static content (default).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>notebook_static()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">notebook_static</span><span class="p">()</span>
+
+<span class="ne">NameError</span>: name &#39;notebook_static&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interactive:</strong>
+Run the following cell for interactive content.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>notebook_interactive()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="deformation-gradient">
+<h1>Deformation Gradient<a class="headerlink" href="#deformation-gradient" title="Permalink to this headline">#</a></h1>
+<p>A body (solid continuum) in 3-dimensional space is given by a domain <span class="math notranslate nohighlight">\(\Omega\subset\mathbb{R}^3\)</span> as a collection of material points <span class="math notranslate nohighlight">\(\boldsymbol{p}\)</span>. The body before and after deformation is represented by two different configurations. The reference (initial) configuration describes the undeformed body with material points <span class="math notranslate nohighlight">\(\boldsymbol{p}\)</span> with coordinates <span class="math notranslate nohighlight">\(\boldsymbol{X}\in\Omega_0\subset\mathbb{R}^3\)</span>. A change of shape of the body (deformation) yields the current (deformed) configuration with material points <span class="math notranslate nohighlight">\(\boldsymbol{p}'\)</span> with coordinates <span class="math notranslate nohighlight">\(\boldsymbol{x}\in\Omega\subset\mathbb{R}^3\)</span>.</p>
+<img alt="Drawing" src="files/code/02_kinematics/configurations.JPG" />
+<p>Both configurations are connected by the deformation field</p>
+<div class="amsmath math notranslate nohighlight" id="equation-1910d0a8-815c-4992-ae8b-fc05e60c8e72">
+<span class="eqno">(4)<a class="headerlink" href="#equation-1910d0a8-815c-4992-ae8b-fc05e60c8e72" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{\phi}:\Omega_0\rightarrow\Omega,\;\boldsymbol{x}=\boldsymbol{\phi}\left(\boldsymbol{X},t\right)
+\end{equation}\]</div>
+<p>with the corresponding displacement field</p>
+<div class="amsmath math notranslate nohighlight" id="equation-fb137129-b6d1-4f3d-8bc8-84e5f09cba23">
+<span class="eqno">(5)<a class="headerlink" href="#equation-fb137129-b6d1-4f3d-8bc8-84e5f09cba23" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{u}:\Omega_0\rightarrow\mathbb{R}^3,\;\boldsymbol{u}\left(\boldsymbol{X},t\right)=\boldsymbol{\phi}\left(\boldsymbol{X},t\right)-\boldsymbol{X}=\boldsymbol{x}-\boldsymbol{X}
+\end{equation}\]</div>
+<p>Capital letters denote the reference configuration, and smallercase letters denote the deformed configuration. A first order Taylor series approximation of the mapping <span class="math notranslate nohighlight">\(\boldsymbol{\phi}\)</span></p>
+<div class="amsmath math notranslate nohighlight" id="equation-d9e1fda7-31d8-48ef-954d-a3f5e6d0887e">
+<span class="eqno">(6)<a class="headerlink" href="#equation-d9e1fda7-31d8-48ef-954d-a3f5e6d0887e" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{x}+d\boldsymbol{x}=\boldsymbol{\phi}\left(\boldsymbol{X}+d\boldsymbol{X}\right)\approx\boldsymbol{\phi}\left(\boldsymbol{X}\right)+\frac{d\boldsymbol{\phi}\left(\boldsymbol{X}\right)}{d\boldsymbol{X}}d\boldsymbol{X}=\boldsymbol{x}+\nabla_{\boldsymbol{X}}\boldsymbol{\phi}\left(\boldsymbol{X}\right)d\boldsymbol{X}
+\end{equation}\]</div>
+<p>gives an approximation of the deformation of line elements <span class="math notranslate nohighlight">\(d\boldsymbol{x}\)</span> by</p>
+<div class="amsmath math notranslate nohighlight" id="equation-a3428ba0-1023-4ebe-bca9-a902f4cfbb6f">
+<span class="eqno">(7)<a class="headerlink" href="#equation-a3428ba0-1023-4ebe-bca9-a902f4cfbb6f" title="Permalink to this equation">#</a></span>\[\begin{equation}
+d\boldsymbol{x}\approx\nabla_{\boldsymbol{X}}\boldsymbol{\phi}=\left(\boldsymbol{X}\right)d\boldsymbol{X}
+\end{equation}\]</div>
+<p>The second order tensor <span class="math notranslate nohighlight">\(\boldsymbol{F}:=\nabla_{\boldsymbol{X}}\boldsymbol{\phi}\left(\boldsymbol{X}\right)=\nabla_\boldsymbol{X}\boldsymbol{x}\left(\boldsymbol{X}\right)=\boldsymbol{I}+\nabla_\boldsymbol{X}\boldsymbol{u}\left(\boldsymbol{X}\right)\)</span> defines the deformation gradient. The deformation gradient is the linearization of the mapping between reference and current deformation.</p>
+<p>The gradient operator corresponds to the componentwise derivative of the deformed vector <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> with respect to the undeformed vector <span class="math notranslate nohighlight">\(\boldsymbol{X}\)</span></p>
+<div class="amsmath math notranslate nohighlight" id="equation-b9152182-6367-4ad2-8b8a-c883e86561e8">
+<span class="eqno">(8)<a class="headerlink" href="#equation-b9152182-6367-4ad2-8b8a-c883e86561e8" title="Permalink to this equation">#</a></span>\[\begin{equation}
+ F_{ij}=x_{i,j}=   \frac{\partial x_i}{\partial X_j} =
+ \begin{bmatrix}
+   \frac{\partial x_1}{\partial X_1} &amp;
+   \frac{\partial x_1}{\partial X_2} &amp; \frac{\partial x_1}{\partial X_3} \\
+   \frac{\partial x_2}{\partial X_1} &amp;
+   \frac{\partial x_2}{\partial X_2} &amp; \frac{\partial x_2}{\partial X_3} \\
+      \frac{\partial x_3}{\partial X_1} &amp;
+   \frac{\partial x_3}{\partial X_2} &amp; \frac{\partial x_3}{\partial X_3} \\
+   \end{bmatrix}
+   \end{equation}\]</div>
+<p>In the following we will restrict to plane stress states.</p>
+<p>The most simple deformation is stretching along the axes directions. Elongation in the 1-direction by 100% and elongation in the 2-direction by 60% is given by the deformation field</p>
+<div class="amsmath math notranslate nohighlight" id="equation-5cce79c4-9a59-4291-b60d-3331f8189f80">
+<span class="eqno">(9)<a class="headerlink" href="#equation-5cce79c4-9a59-4291-b60d-3331f8189f80" title="Permalink to this equation">#</a></span>\[\begin{equation}
+x_1=2.0\cdot X_1 + 0.0 \cdot X_2
+\\
+x_2=0.0 \cdot X_1 + 1.6 \cdot X_2
+\end{equation}\]</div>
+<p>which gives the deformation gradient</p>
+<div class="amsmath math notranslate nohighlight" id="equation-02246c40-6c3f-4a53-89e5-6f669a48bb4f">
+<span class="eqno">(10)<a class="headerlink" href="#equation-02246c40-6c3f-4a53-89e5-6f669a48bb4f" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{F}=
+ \begin{bmatrix}
+   2 &amp; 0 \\
+   0 &amp; 1.6
+   \end{bmatrix}
+   \end{equation}\]</div>
+<section id="polar-decomposition">
+<h2>Polar Decomposition<a class="headerlink" href="#polar-decomposition" title="Permalink to this headline">#</a></h2>
+<p>The deformation gradient can be uniquely composed into a part which rotates the body, and a part which changes the shape of the body. This multiplicative decomposition is called polar decomposition, which results in</p>
+<div class="amsmath math notranslate nohighlight" id="equation-67308b9d-a024-49fa-bc47-056dff643b14">
+<span class="eqno">(11)<a class="headerlink" href="#equation-67308b9d-a024-49fa-bc47-056dff643b14" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{F}=\boldsymbol{R}\cdot\boldsymbol{U}=\boldsymbol{v}\cdot\boldsymbol{R}
+\end{equation}\]</div>
+<p>The symbols <span class="math notranslate nohighlight">\(\boldsymbol{U}:=\sqrt{\boldsymbol{F}^T\boldsymbol{F}}\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{v}:=\sqrt{\boldsymbol{F}\boldsymbol{F}^T}\)</span> denote the right and left stretch tensors, respectively. Both are symmetric positive definite.The symbol <span class="math notranslate nohighlight">\(\boldsymbol{R}:=\boldsymbol{F}\cdot\boldsymbol{U}^{-1}\)</span> denotes the unimodular, orthogonal rotation tensor, i.e. <span class="math notranslate nohighlight">\(\boldsymbol{R}^T\cdot\boldsymbol{R}=\boldsymbol{R}\cdot\boldsymbol{R}^T=\boldsymbol{I}\)</span> and <span class="math notranslate nohighlight">\(\text{det}\left(\boldsymbol{R}\right)=1\)</span>
+.</p>
+</section>
+<section id="volume-change">
+<h2>Volume Change<a class="headerlink" href="#volume-change" title="Permalink to this headline">#</a></h2>
+<p>The volumetric strain is given by the determinant of the deformation gradient <span class="math notranslate nohighlight">\(J:=\text{det}\left(\boldsymbol{F}\right)&gt;0\)</span>. At volume preserving deformations which we know from (nearly) incompressible materials, the Jacobian determinant equals one.</p>
+<p>The deformation gradient can further be composed into a part which changes the volume, and a part which changes the shape of body while preserving the volume, which is called deviatoric deformation.</p>
+<div class="amsmath math notranslate nohighlight" id="equation-0c55949c-2c64-4cdb-ae13-4e7b97378c34">
+<span class="eqno">(12)<a class="headerlink" href="#equation-0c55949c-2c64-4cdb-ae13-4e7b97378c34" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{F}=\boldsymbol{R}\cdot\boldsymbol{U}=\boldsymbol{R}\cdot\boldsymbol{U}_{dev}\cdot\boldsymbol{U}_{vol}
+\end{equation}\]</div>
+<p>The deviatoric stretch tensor is unimodular, i.e. <span class="math notranslate nohighlight">\(\text{det}\left(\boldsymbol{U}_{dev}\right)=1\)</span>. The volumetric stretch tensor can be expressed with the scaled second order unit tensor <span class="math notranslate nohighlight">\(\boldsymbol{U}_{vol}=\epsilon_{vol}\cdot\boldsymbol{I}\)</span></p>
+<p>The following examples are restricted to plane strain deformation states.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>F_decomposition()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Deformation Gradient
+
+F =
+[[1.100 0.300 0.000]
+ [0.000 1.100 0.000]
+ [0.000 0.000 1.000]]
+
+
+Rotation Tensor
+
+R =
+[[0.991 0.135 0.000]
+ [-0.135 0.991 0.000]
+ [0.000 0.000 1.000]]
+
+
+Right Stretch Tensor
+
+U =
+[[1.090 0.149 0.000]
+ [0.149 1.130 0.000]
+ [0.000 0.000 1.000]]
+
+
+Volume Ratio
+
+J =
+   1.210
+</pre></div>
+</div>
+<img alt="_images/02_kinematics_10_1.png" src="_images/02_kinematics_10_1.png" />
+<img alt="_images/02_kinematics_10_2.png" src="_images/02_kinematics_10_2.png" />
+<script type="application/javascript">Jupyter.notebook.execute_cells([13, 18, 20])</script></div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="strain-measures">
+<h1>Strain Measures<a class="headerlink" href="#strain-measures" title="Permalink to this headline">#</a></h1>
+<p>At deformation, the length of the infinitesimal line element <span class="math notranslate nohighlight">\(d\boldsymbol{X}\)</span> is changed. The change of length between the infinitesimal line element in the reference configuration <span class="math notranslate nohighlight">\(d\boldsymbol{X}\)</span> and the length of the line element <span class="math notranslate nohighlight">\(d\boldsymbol{x}\)</span> in the deformed configuration leads to</p>
+<div class="amsmath math notranslate nohighlight" id="equation-48ae9398-659a-4d96-a6a6-09c846d942c5">
+<span class="eqno">(13)<a class="headerlink" href="#equation-48ae9398-659a-4d96-a6a6-09c846d942c5" title="Permalink to this equation">#</a></span>\[\begin{equation}
+||d\boldsymbol{x}||^2-||d\boldsymbol{X}||^2=d\boldsymbol{x}\cdot d\boldsymbol{x}-d\boldsymbol{X}\cdot d\boldsymbol{X}
+\\
+=\left(\boldsymbol{F}d\boldsymbol{X}\right)^T\left(\boldsymbol{F}d\boldsymbol{X}\right)-d\boldsymbol{X}^Td\boldsymbol{X}=d\boldsymbol{X}^T\left(\boldsymbol{F}^T\boldsymbol{F}-\boldsymbol{I}\right)d\boldsymbol{X}
+\end{equation}\]</div>
+<p>With the right Cauchy-Green strain tensor</p>
+<div class="amsmath math notranslate nohighlight" id="equation-e1cf9dfe-cd99-44e7-80a0-11d05a482d80">
+<span class="eqno">(14)<a class="headerlink" href="#equation-e1cf9dfe-cd99-44e7-80a0-11d05a482d80" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{C}=\boldsymbol{F}^T\boldsymbol{F} = \boldsymbol{U}^T\boldsymbol{U}
+.\end{equation}\]</div>
+<p>Therefore the so called Green-Lagrange strain tensor</p>
+<div class="amsmath math notranslate nohighlight" id="equation-8e6e9832-3375-4852-8cb8-209ea79f97d0">
+<span class="eqno">(15)<a class="headerlink" href="#equation-8e6e9832-3375-4852-8cb8-209ea79f97d0" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{E}=\frac{1}{2}\left(\boldsymbol{F}^T\boldsymbol{F}-\boldsymbol{I}\right)
+\end{equation}\]</div>
+<p>is a measure for the change of length of an infinitesimal line element with respect to the material configuration.
+For small deformations, the Green-Lagrange tensor can be approximated by it’s linearization. The linearized strain tensor for small deformations is called infinitesimal strain tensor, and given by</p>
+<div class="amsmath math notranslate nohighlight" id="equation-6232591d-7af2-4628-af03-15a7441f7695">
+<span class="eqno">(16)<a class="headerlink" href="#equation-6232591d-7af2-4628-af03-15a7441f7695" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\boldsymbol{E}_{lin}=\boldsymbol{\epsilon}=\frac{1}{2}\left(\boldsymbol{F}^T+\boldsymbol{F}\right)-\boldsymbol{I}
+\end{equation}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>strain_measures(F11,F22,F12,F21)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Green-Lagrange Strain Tensor
+E =
+[[0.105 0.165 0.000]
+ [0.165 0.150 0.000]
+ [0.000 0.000 0.000]]
+
+
+Linearized Strain Tensor
+E_lin =
+[[0.100 0.150 0.000]
+ [0.150 0.100 0.000]
+ [0.000 0.000 0.000]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the graphic below, the Green-Lagrange Strain Tensor and the Linearized Strain Tensor for uniaxial tension are compared. The 11-component of the strain tensors is shown.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>strain_measures_lin_plot()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/02_kinematics_15_0.png" src="_images/02_kinematics_15_0.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="eigenvalues-and-invariants">
+<h1>Eigenvalues and  Invariants<a class="headerlink" href="#eigenvalues-and-invariants" title="Permalink to this headline">#</a></h1>
+<p>The eigenvalue problem for the right Cauchy-Green tensor <span class="math notranslate nohighlight">\(\boldsymbol{C}\)</span></p>
+<div class="amsmath math notranslate nohighlight" id="equation-5d042d03-9a42-4ed6-b4d7-2ac57c351ca1">
+<span class="eqno">(17)<a class="headerlink" href="#equation-5d042d03-9a42-4ed6-b4d7-2ac57c351ca1" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\left(\boldsymbol{C}-\lambda_i^2\boldsymbol{I}\right)\boldsymbol{N}_i=\boldsymbol{0},\;\;\;\left(i=1,2,3;\;\text{no summation}\right)
+\end{equation}\]</div>
+<p>yields the three positive and real eigenvalues <span class="math notranslate nohighlight">\(\lambda_i^2\)</span> with their corresponding orthogonal and normalized eigenvectors <span class="math notranslate nohighlight">\(\boldsymbol{N}_i\)</span>. The square roots of the eigenvalues give the principal stretches <span class="math notranslate nohighlight">\(\lambda_i\)</span>, with the eigenvectors <span class="math notranslate nohighlight">\(\boldsymbol{N}_i\)</span> as principal directions. Rotated into the principal system, the Right Cauchy-Green tensor consists only of main diagonal elements. The tension entries become extremal, while the shear entries vanish.</p>
+<p>In the graphic below, the principal stretches for the plane strain deformation defined in the beginning of the notebook are shown.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>eigenvalues(F11,F22,F12,F21)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/02_kinematics_18_0.png" src="_images/02_kinematics_18_0.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Principal Stretches
+[0.960 1.260 1.000]
+
+
+Eigenvectors (ordered in columns)
+[[-0.753 -0.658 0.000]
+ [0.658 -0.753 0.000]
+ [0.000 0.000 1.000]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The invariants of a tensor are scalar quantities which remain unchanged under change of observer. For example, the Euclidean norm of a first order tensor, which corresponds to the length of a vector, is invariant under rotation or translation:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-36b5c774-67b3-4e21-b29f-ffba65a464e4">
+<span class="eqno">(18)<a class="headerlink" href="#equation-36b5c774-67b3-4e21-b29f-ffba65a464e4" title="Permalink to this equation">#</a></span>\[\begin{equation}
+I\left(\boldsymbol{a}\right)=\sqrt{a_i^2}
+\end{equation}\]</div>
+<p>A second order tensor <span class="math notranslate nohighlight">\(\boldsymbol{A}\)</span> with eigenvalues <span class="math notranslate nohighlight">\(A_i\)</span> has three independent invariants.</p>
+<div class="amsmath math notranslate nohighlight" id="equation-709e729f-7e96-4b04-9828-b5b0b52d521d">
+<span class="eqno">(19)<a class="headerlink" href="#equation-709e729f-7e96-4b04-9828-b5b0b52d521d" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\begin{aligned}
+I_1\left(\boldsymbol{A}\right)&amp;=\text{tr}\boldsymbol{A}
+\\
+&amp;=A_1+A_2+A_3
+\\
+I_2\left(\boldsymbol{A}\right)&amp;=\frac{1}{2}\left(\left(\text{tr}\boldsymbol{A}\right)^2-\text{tr}\left(\boldsymbol{A}^2\right)\right)
+\\
+&amp;=A_1A_2+A_1A_3+A_2A_3
+\\
+I_3\left(\boldsymbol{A}\right)&amp;=\text{det}\boldsymbol{A}
+\\
+&amp;=A_1A_2A_3
+\\
+\end{aligned}
+\end{equation}\]</div>
+<p>which can be derived from the Caley-Hamilton theorem, see for example Holzapfel (2000).
+The invariants of strain and deformation tensors can be used as a scalar measure for the state of deformation. For example, the third invariant of the deformation gradient corresponds to the volumetric deformation ratio.</p>
+<p>With the three invariants, the deviatoric state of deformation can be further examined. The determinant of the deviatoric Right Cauchy-Green tensor equals one, since it contains no volumetric deformation. Two independent principal stretches remain, which can be uniquely determined when the first two invariants are given.</p>
+<p>In the graph below, the invariant plane for the first and second invariant of the Right Cauchy-Green tensor is displayed. It can be shown that every deformation lies between the “Uniaxial Tension” and the “Equibiaxial Tension” prototype deformations, with “Shear” between them, see e.g. Baaser (2013). With the first two invariants of an arbitrary deviatoric deformation it can be examined which kind of deformation is occuring. This can be important in the design process of mechanical components, e.g. with shear buffers made of rubber (is the state of deformation in the buffer actually a shear deformation?).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>deformation_state(F11,F22,F12,F21)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/02_kinematics_20_0.png" src="_images/02_kinematics_20_0.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="further-information">
+<h1>Further Information<a class="headerlink" href="#further-information" title="Permalink to this headline">#</a></h1>
+<p>Holzapfel, G. (2000). Nonlinear solid mechanics: a continuum approach for engineering.</p>
+<p>Destrade, M. et al. (2012). Simple shear is not so simple.</p>
+<p>Baaser, H. et al. (2013). Reformulation of strain invariants at incompressibility.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Magic functions for interactive graphs
+def interactive_plot(x):
+    if x:
+        %matplotlib notebook
+    else:
+        %matplotlib inline
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="01_michaelismenten.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Macro Solution</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="02_kinematics_tasks.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Kinematics Tasks</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Prof. Oliver Weeger, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
