@@ -1,3 +1,6 @@
+
+[thangckt convert available at this link](https://thangckt.github.io/lec_multiscale)
+
 # Lecture Multiscale Methods in Computational Mechanics
 
 Lecturer: Prof. Dr. rer. nat. Oliver Weeger
@@ -39,7 +42,3 @@ For online interaction with the models, please open the repository through
 **Homogenization methods**
 
 * [Analytical methods](04_Analytical_methods.ipynb)
-
-## Online notebook
-
-[thangckt convert available at this link](https://thangckt.github.io/lec_multiscale)
